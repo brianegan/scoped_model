@@ -1,4 +1,4 @@
-image: brianegan/flutter:v4
+image: brianegan/flutter:v7
 
 stages:
   - test
@@ -7,8 +7,8 @@ stages:
 unit_test:
   stage: test
   script:
-    - flutter test # --coverage
-#    - genhtml lcov.info --output=coverage
+    - flutter test --coverage
+    - genhtml coverage/lcov.info --output=coverage
   artifacts:
     paths:
       - coverage/
