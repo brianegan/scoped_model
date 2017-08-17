@@ -32,7 +32,29 @@ void main() {
     // Rebuild the widget
     await tester.pumpWidget(widget);
 
+    expect(model.listenerCount, 1);
     expect((tester.firstWidget(find.byKey(testKey)) as Text).data, '1');
+  });
+
+  testWidgets(
+      'Widgets do not update when the model notifies the listeners if the choose not to',
+      (WidgetTester tester) async {
+    final initialValue = 0;
+    final model = new TestModel(initialValue);
+    final widget = new TestWidget.noRebuild(model);
+
+    // Starts out at the initial value
+    await tester.pumpWidget(widget);
+
+    // Increment the model, which shouldn't trigger a rebuild
+    model.increment();
+
+    // Rebuild the widget
+    await tester.pumpWidget(widget);
+
+    expect(model.listenerCount, 1);
+    expect((tester.firstWidget(find.byKey(testKey)) as Text).data,
+        initialValue.toString());
   });
 }
 
@@ -55,8 +77,11 @@ class TestModel extends Model {
 
 class TestWidget extends StatelessWidget {
   final TestModel model;
+  final bool rebuildOnChange;
 
-  TestWidget(this.model);
+  TestWidget(this.model, [this.rebuildOnChange = true]);
+
+  factory TestWidget.noRebuild(TestModel model) => new TestWidget(model, false);
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +91,7 @@ class TestWidget extends StatelessWidget {
       child: new Container(
         child: new Container(
           child: new ScopedModelDescendant<TestModel>(
+            rebuildOnChange: rebuildOnChange,
             builder: (context, child, model) => new Text(
                   model.counter.toString(),
                   key: testKey,

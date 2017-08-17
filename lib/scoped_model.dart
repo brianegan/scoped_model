@@ -158,13 +158,20 @@ class ScopedModelDescendant<T extends Model> extends StatelessWidget {
   /// as the child of [builder].
   final Widget child;
 
+  /// An optional constant that determines whether the
+  final bool rebuildOnChange;
+
   /// Constructor.
-  ScopedModelDescendant({this.builder, this.child});
+  ScopedModelDescendant(
+      {this.builder, this.child, this.rebuildOnChange = true});
 
   @override
   Widget build(BuildContext context) => builder(
         context,
         child,
-        new ModelFinder<T>().of(context, rebuildOnChange: true),
+        new ModelFinder<T>().of(
+          context,
+          rebuildOnChange: rebuildOnChange,
+        ),
       );
 }
