@@ -1,0 +1,13 @@
+name: scoped_model
+description: A Widget that passes a Model to all of it's children
+version: 0.1.0
+author: brian.egan <brian@brianegan.com>
+homepage: https://gitlab.com/brianegan/scoped_model
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
