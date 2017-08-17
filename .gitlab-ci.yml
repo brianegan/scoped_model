@@ -11,7 +11,7 @@ unit_test:
     - pwd
     - ls
     - ls lib
-    - genhtml coverage/lcov.info --output=coverage
+    - genhtml coverage/lcov.info --output=coverage --prefix=$(pwd)
   artifacts:
     paths:
       - coverage/
