@@ -8,6 +8,9 @@ unit_test:
   stage: test
   script:
     - flutter test --coverage
+    - pwd
+    - ls
+    - ls lib
     - genhtml coverage/lcov.info --output=coverage
   artifacts:
     paths:
