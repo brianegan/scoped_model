@@ -16,7 +16,7 @@ unit_test:
 pages:
   stage: deploy
   dependencies:
-    - coverage
+    - unit_test
   script:
     - mkdir public
     - mv coverage/ public/coverage/
