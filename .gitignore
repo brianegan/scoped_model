@@ -10,3 +10,4 @@ pubspec.lock
 .flutter-plugins
 *.iml
 /coverage/
+*.log

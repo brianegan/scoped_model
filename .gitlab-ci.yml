@@ -7,11 +7,8 @@ stages:
 unit_test:
   stage: test
   script:
-    - flutter test --coverage
-    - pwd
-    - ls
-    - ls lib
-    - genhtml coverage/lcov.info --output=coverage --prefix=$(pwd)
+    - flutter test # --coverage
+#    - genhtml lcov.info --output=coverage
   artifacts:
     paths:
       - coverage/
