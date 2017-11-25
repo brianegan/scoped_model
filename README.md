@@ -1,6 +1,6 @@
 # scoped_model
 
-[![build status](https://gitlab.com/brianegan/scoped_model/badges/master/build.svg)](https://gitlab.com/brianegan/scoped_model/commits/master)  [![coverage report](https://gitlab.com/brianegan/scoped_model/badges/master/coverage.svg)](https://brianegan.gitlab.io/scoped_model/coverage/)
+[![Build Status](https://travis-ci.org/brianegan/scoped_model.svg?branch=master)](https://travis-ci.org/brianegan/scoped_model)  [![codecov](https://codecov.io/gh/brianegan/scoped_model/branch/master/graph/badge.svg)](https://codecov.io/gh/brianegan/scoped_model)
 
 A set of utilities that allow you to easily pass a data Model from a parent Widget down to it's descendants. In addition, it also re-renders all of the children who use the model when the model is updated.
 

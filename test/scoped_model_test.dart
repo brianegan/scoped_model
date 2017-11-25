@@ -95,6 +95,7 @@ class TestWidget extends StatelessWidget {
             builder: (context, child, model) => new Text(
                   model.counter.toString(),
                   key: testKey,
+                  textDirection: TextDirection.ltr,
                 ),
           ),
         ),

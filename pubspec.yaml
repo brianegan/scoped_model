@@ -1,8 +1,8 @@
 name: scoped_model
-description: A Widget that passes a Model to all of it's children
-version: 0.1.0
+description: A Widget that passes a Reactive Model to all of it's children
+version: 0.1.1
 author: brian.egan <brian@brianegan.com>
-homepage: https://gitlab.com/brianegan/scoped_model
+homepage: https://github.com/brianegan/scoped_model
 
 dependencies:
   flutter:
