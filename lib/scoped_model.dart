@@ -5,17 +5,19 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 
 /// Base class for classes that provide data via [InheritedWidget]s.
-abstract class Model {
+abstract class Model extends Listenable {
   final Set<VoidCallback> _listeners = new Set<VoidCallback>();
   int _version = 0;
   int _microtaskVersion = 0;
 
   /// [listener] will be notified when the model changes.
+  @override
   void addListener(VoidCallback listener) {
     _listeners.add(listener);
   }
 
   /// [listener] will no longer be notified when the model changes.
+  @override
   void removeListener(VoidCallback listener) {
     _listeners.remove(listener);
   }
