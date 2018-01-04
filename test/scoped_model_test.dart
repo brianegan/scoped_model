@@ -56,6 +56,48 @@ void main() {
     expect((tester.firstWidget(find.byKey(testKey)) as Text).data,
         initialValue.toString());
   });
+
+  testWidgets("model change doesn't build widgets between model and descendant",
+      (WidgetTester tester) async {
+    var testModel = new TestModel();
+
+    // use List to pass the counter by reference
+    List<int> buildCounter = [0];
+
+    // build widget tree with items between scope and descendant
+    var tree = new MaterialApp(
+      home: new ScopedModel<TestModel>(
+        model: testModel,
+        child: new Container(
+          child: new BuildCountContainer(
+            buildCounter: buildCounter,
+            child: new ScopedModelDescendant<TestModel>(
+              builder: (BuildContext context, Widget child, TestModel model) {
+                return new Text("${model.counter}");
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // initial drawing shows the counter form the model
+    await tester.pumpWidget(tree);
+    tester.element(find.text("0"));
+    // the render method of the widgets between scope and descendant is called once
+    expect(buildCounter[0], equals(1));
+
+    // Increment the model, which should rebuild only the listening descendant subtree
+    testModel.increment();
+    await tester.pump();
+    await tester.pump();
+
+    // the text changes correctly
+    tester.element(find.text("1"));
+
+    // the render method of the widgets between scope and descendant doesn't get called!
+    expect(buildCounter[0], equals(1));
+  });
 }
 
 final testKey = new UniqueKey();
@@ -102,4 +144,16 @@ class TestWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class BuildCountContainer extends Container {
+  final List<int> buildCounter;
+
+  @override
+  Widget build(BuildContext context) {
+    buildCounter[0]++;
+    return super.build(context);
+  }
+
+  BuildCountContainer({Widget child, this.buildCounter}) : super(child: child);
 }
