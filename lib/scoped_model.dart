@@ -70,7 +70,7 @@ class ScopedModel<T extends Model> extends StatelessWidget {
   final Widget child;
 
   /// Constructor.
-  ScopedModel({this.model, this.child});
+  ScopedModel({this.model, this.child}) : assert(model != null);
 
   @override
   Widget build(BuildContext context) => new _ModelListener(
