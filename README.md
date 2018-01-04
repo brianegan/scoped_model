@@ -55,3 +55,8 @@ class CounterApp extends StatelessWidget {
   }
 }
 ```  
+
+## Contributors
+
+  * [Brian Egan](https://github.com/brianegan)
+  * [Pascal Welsch](https://github.com/passsy)
