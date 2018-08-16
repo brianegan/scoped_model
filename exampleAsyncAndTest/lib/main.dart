@@ -3,14 +3,13 @@ import 'package:scoped_model/scoped_model.dart';
 import 'dart:async';
 
 void main() {
-  AbstractModel currentModel = CounterModel();
-  //AbstractModel currentModel = TestModel();
-  runApp(new MyApp(currentModel));
+  runApp(new MyApp(model: CounterModel()));
 }
 
 class MyApp extends StatelessWidget {
-  AbstractModel _currentModel;
-  MyApp(this._currentModel);
+  final AbstractModel model;
+
+  const MyApp({Key key, @required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
     // will provide the CounterModel to all children in the app that request it
     // using a ScopedModelDescendant.
     return new ScopedModel<AbstractModel>(
-      model: _currentModel,
+      model: model,
       child: new MaterialApp(
         title: 'Flutter Demo',
         theme: new ThemeData(
@@ -101,10 +100,10 @@ class CounterHome extends StatelessWidget {
       // method from the CounterModel
       floatingActionButton: new ScopedModelDescendant<AbstractModel>(
         builder: (context, child, model) => new FloatingActionButton(
-          onPressed: model.increment,
-          tooltip: 'Increment',
-          child: new Icon(Icons.add),
-        ),
+              onPressed: model.increment,
+              tooltip: 'Increment',
+              child: new Icon(Icons.add),
+            ),
       ),
     );
   }

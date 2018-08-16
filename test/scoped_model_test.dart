@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:scoped_model/scoped_model.dart';
 
 void main() {
@@ -12,9 +11,7 @@ void main() {
 
     await tester.pumpWidget(widget);
 
-    final Text text = tester.firstWidget(find.byKey(testKey));
-
-    expect(text.data, initialValue.toString());
+    expect(find.text('$initialValue'), findsOneWidget);
   });
 
   testWidgets('Widgets update when the model notifies the listeners',
@@ -33,7 +30,7 @@ void main() {
     await tester.pumpWidget(widget);
 
     expect(model.listenerCount, 1);
-    expect((tester.firstWidget(find.byKey(testKey)) as Text).data, '1');
+    expect(find.text('1'), findsOneWidget);
   });
 
   testWidgets(
@@ -53,8 +50,7 @@ void main() {
     await tester.pumpWidget(widget);
 
     expect(model.listenerCount, 1);
-    expect((tester.firstWidget(find.byKey(testKey)) as Text).data,
-        initialValue.toString());
+    expect(find.text('$initialValue'), findsOneWidget);
   });
 
   testWidgets("model change doesn't build widgets between model and descendant",
@@ -83,7 +79,7 @@ void main() {
 
     // initial drawing shows the counter form the model
     await tester.pumpWidget(tree);
-    tester.element(find.text("0"));
+    expect(find.text('0'), findsOneWidget);
     // the render method of the widgets between scope and descendant is called once
     expect(buildCounter[0], equals(1));
 
@@ -93,14 +89,23 @@ void main() {
     await tester.pump();
 
     // the text changes correctly
-    tester.element(find.text("1"));
+    expect(find.text("1"), findsOneWidget);
 
     // the render method of the widgets between scope and descendant doesn't get called!
     expect(buildCounter[0], equals(1));
   });
-}
 
-final testKey = new UniqueKey();
+  testWidgets('Throws an error if type info not provided',
+      (WidgetTester tester) async {
+    final initialValue = 0;
+    final model = new TestModel(initialValue);
+    final widget = new ErrorWidget(model);
+
+    await tester.pumpWidget(widget);
+
+    expect(tester.takeException(), isInstanceOf<ScopedModelError>());
+  });
+}
 
 class TestModel extends Model {
   int _counter;
@@ -134,11 +139,40 @@ class TestWidget extends StatelessWidget {
         child: new Container(
           child: new ScopedModelDescendant<TestModel>(
             rebuildOnChange: rebuildOnChange,
-            builder: (context, child, model) => new Text(
-                  model.counter.toString(),
-                  key: testKey,
-                  textDirection: TextDirection.ltr,
-                ),
+            builder: (context, child, model) {
+              return new Text(
+                model.counter.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ErrorWidget extends StatelessWidget {
+  final TestModel model;
+  final bool rebuildOnChange;
+
+  ErrorWidget(this.model, [this.rebuildOnChange = true]);
+
+  @override
+  Widget build(BuildContext context) {
+    return new ScopedModel<TestModel>(
+      model: model,
+      // Extra nesting to ensure the model is sent down the tree.
+      child: new Container(
+        child: new Container(
+          child: new ScopedModelDescendant(
+            rebuildOnChange: rebuildOnChange,
+            builder: (context, child, model) {
+              return new Text(
+                model.counter.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
           ),
         ),
       ),

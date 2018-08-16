@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0
+
+  * Add constraint for Dart SDK (>=2.0.0-dev-28.0 <3.0.0)
+  * Update / add lots of docs
+  * Expose the `ModelLister` publicly, renamed to `ModelBuilder`
+  * Add helpful error message if model could not be found
+
 ## 0.2.0
 
   * Thanks to @passsy for the contributions!

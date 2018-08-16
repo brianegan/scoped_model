@@ -2,23 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 void main() {
-  runApp(new MyApp());
+  runApp(MyApp(
+    model: CounterModel(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
+  final CounterModel model;
+
+  const MyApp({Key key, @required this.model}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // At the top level of our app, we'll, create a ScopedModel Widget. This
     // will provide the CounterModel to all children in the app that request it
     // using a ScopedModelDescendant.
-    return new ScopedModel<CounterModel>(
-      model: new CounterModel(),
-      child: new MaterialApp(
-        title: 'Flutter Demo',
-        theme: new ThemeData(
-          primarySwatch: Colors.green,
-        ),
-        home: new CounterHome('Scoped Model Demo'),
+    return ScopedModel<CounterModel>(
+      model: model,
+      child: MaterialApp(
+        title: 'Scoped Model Demo',
+        home: CounterHome('Scoped Model Demo'),
       ),
     );
   }
@@ -48,38 +51,41 @@ class CounterHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text(title),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
       ),
-      body: new Center(
-        child: new Column(
+      body: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
-            ),
+            Text('You have pushed the button this many times:'),
             // Create a ScopedModelDescendant. This widget will get the
             // CounterModel from the nearest parent ScopedModel<CounterModel>.
             // It will hand that CounterModel to our builder method, and
             // rebuild any time the CounterModel changes (i.e. after we
             // `notifyListeners` in the Model).
-            new ScopedModelDescendant<CounterModel>(
-              builder: (context, child, model) => new Text(
+            ScopedModelDescendant<CounterModel>(
+              builder: (context, child, model) {
+                return Text(
                   model.counter.toString(),
-                  style: Theme.of(context).textTheme.display1),
+                  style: Theme.of(context).textTheme.display1,
+                );
+              },
             ),
           ],
         ),
       ),
       // Use the ScopedModelDescendant again in order to use the increment
       // method from the CounterModel
-      floatingActionButton: new ScopedModelDescendant<CounterModel>(
-        builder: (context, child, model) => new FloatingActionButton(
-              onPressed: model.increment,
-              tooltip: 'Increment',
-              child: new Icon(Icons.add),
-            ),
+      floatingActionButton: ScopedModelDescendant<CounterModel>(
+        builder: (context, child, model) {
+          return FloatingActionButton(
+            onPressed: model.increment,
+            tooltip: 'Increment',
+            child: Icon(Icons.add),
+          );
+        },
       ),
     );
   }
