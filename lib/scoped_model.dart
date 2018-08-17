@@ -154,10 +154,12 @@ class ScopedModel<T extends Model> extends StatelessWidget {
   /// class CombinedWidget extends StatelessWidget {
   ///   @override
   ///   Widget build(BuildContext context) {
-  ///     final userName = ScopedModel.of<UserModel>(context).userName;
-  ///     final counter = ScopedModel.of<CounterModel>(context).counter;
+  ///     final username =
+  ///       ScopedModel.of<UserModel>(context, rebuildOnChange: true).username;
+  ///     final counter =
+  ///       ScopedModel.of<CounterModel>(context, rebuildOnChange: true).counter;
   ///
-  ///     return Text('$userName tapped the button $counter times');
+  ///     return Text('$username tapped the button $counter times');
   ///   }
   /// }
   /// ```
