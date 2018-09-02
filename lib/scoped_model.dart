@@ -163,10 +163,8 @@ class ScopedModel<T extends Model> extends StatelessWidget {
   ///   }
   /// }
   /// ```
-  static T of<T extends Model>(
-    BuildContext context, {
-    bool rebuildOnChange = false,
-  }) {
+  static T of<T extends Model>(BuildContext context,
+      {bool rebuildOnChange = false, bool nullOk = false}) {
     final Type type = _type<_InheritedModel<T>>();
 
     Widget widget = rebuildOnChange
@@ -174,6 +172,7 @@ class ScopedModel<T extends Model> extends StatelessWidget {
         : context.ancestorWidgetOfExactType(type);
 
     if (widget == null) {
+      if (nullOk) return null;
       throw new ScopedModelError();
     } else {
       return (widget as _InheritedModel<T>).model;
