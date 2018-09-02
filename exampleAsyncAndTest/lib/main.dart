@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+import '../../lib/scoped_model.dart';
 
 void main() {
   runApp(new MyApp(model: CounterModel()));
