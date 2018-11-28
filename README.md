@@ -2,9 +2,20 @@
 
 [![Build Status](https://travis-ci.org/brianegan/scoped_model.svg?branch=master)](https://travis-ci.org/brianegan/scoped_model)  [![codecov](https://codecov.io/gh/brianegan/scoped_model/branch/master/graph/badge.svg)](https://codecov.io/gh/brianegan/scoped_model)
 
-A set of utilities that allow you to easily pass a data Model from a parent Widget down to it's descendants. In addition, it also re-renders all of the children that use the model when the model is updated.
+A set of utilities that allow you to easily pass a data Model from a parent Widget down to it's descendants. In addition, it also rebuilds all of the children that use the model when the model is updated. This library was originally extracted from the Fuchsia codebase. 
 
-Besides a couple of tests and a bit of documentation, this is not my work / idea. It's a simple extraction of the [Model classes](https://github.com/fuchsia-mirror/topaz/blob/c2be8939b45ad0494f0130dbea6460e77abbe62b/public/dart/widgets/lib/src/model/model.dart) from Fuchsia's core Widgets, presented as a standalone Flutter Plugin for independent use so we can evaluate this architecture pattern more easily as a community.
+This Library provides three main classes:
+
+  * The `Model` class. You will extend this class to create your own Models, such as `SearchModel` or `UserModel`. You can listen to Models for changes!
+  * The `ScopedModel` Widget. If you need to pass a `Model` deep down your Widget hierarchy, you can wrap your `Model` in a `ScopedModel` Widget. This will make the Model available to all descendant Widgets.
+  * The `ScopedModelDescendant` Widget. Use this Widget to find the appropriate `ScopedModel` in the Widget tree. It will automatically rebuild whenever the Model notifies that change has taken place.
+
+This library is built upon several features of Flutter:
+
+  * The `Model` class implements the `Listenable` interface
+    * `AnimationController` and `TextEditingController` are also `Listenables`
+  * The `Model` is passed down the Widget tree using an `InheritedWidget`. When an `InheritedWidget` is rebuilt, it will surgically rebuild all of the Widgets that depend on it's data. No need to manage subscriptions!
+  * It uses the `AnimatedBuilder` Widget under the hood to listen to the Model and rebuild the `InheritedWidget` when the model changes. 
 
 ## Examples
 
@@ -60,7 +71,7 @@ class CounterApp extends StatelessWidget {
 }
 ```
 
-### Finding the Model
+## Finding the Model
 
 There are two ways to find the `Model` provided by the `ScopedModel` Widget.
 
@@ -76,10 +87,40 @@ class CounterModel extends Model {
   static CounterModel of(BuildContext context) =>
       ScopedModel.of<CounterModel>(context);
 }
-```  
+```
+
+## Listening to multiple Models in a build function
+
+In many cases, it makes sense to split your Models apart into logical components
+by functionality. For example, rather than having an `AppModel` that contains
+all of your application logic, it can often make more sense to split models
+apart into a `UserModel`, a `SearchModel` and a `ProductModel`, for example.
+
+However, if you need to display information from two of these models in a single
+Widget, you might be wondering how to achieve that! To do so, you have two 
+options:
+
+  1. Use multiple `ScopedModelDescendant` Widgets
+  2. Use multiple `ScopedModel.of` calls. No need to manage subscriptions,
+  Flutter takes care of all of that through the magic of InheritedWidgets.
+  
+```dart
+class CombinedWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final username =
+      ScopedModel.of<UserModel>(context, rebuildOnChange: true).username;
+    final counter =
+      ScopedModel.of<CounterModel>(context, rebuildOnChange: true).counter;
+
+    return Text('$username tapped the button $counter times');
+  }
+}
+```
 
 ## Contributors
 
-  * Original Authors
+  * Original Fuchsia Authors
+  * [Andrew Wilson](https://github.com/apwilson)
   * [Brian Egan](https://github.com/brianegan)
   * [Pascal Welsch](https://github.com/passsy)
