@@ -78,7 +78,7 @@ class ModelFinder<T extends Model> {
   ///
   /// [Widget]s who call [of] with a [rebuildOnChange] of true will be rebuilt
   /// whenever there's a change to the returned model.
-  T of(BuildContext context, {bool rebuildOnChange: false}) {
+  T of(BuildContext context, {bool rebuildOnChange = false}) {
     return ScopedModel.of<T>(context, rebuildOnChange: rebuildOnChange);
   }
 }
@@ -178,7 +178,7 @@ class ScopedModel<T extends Model> extends StatelessWidget {
         : context.ancestorWidgetOfExactType(type);
 
     if (widget == null) {
-      throw new ScopedModelError();
+      throw ScopedModelError();
     } else {
       return (widget as _InheritedModel<T>).model;
     }

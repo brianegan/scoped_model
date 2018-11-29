@@ -6,8 +6,8 @@ void main() {
   testWidgets('Models can be handed down from parent to child',
       (WidgetTester tester) async {
     final initialValue = 0;
-    final model = new TestModel(initialValue);
-    final widget = new TestWidget(model);
+    final model = TestModel(initialValue);
+    final widget = TestWidget(model);
 
     await tester.pumpWidget(widget);
 
@@ -17,8 +17,8 @@ void main() {
   testWidgets('Widgets update when the model notifies the listeners',
       (WidgetTester tester) async {
     final initialValue = 0;
-    final model = new TestModel(initialValue);
-    final widget = new TestWidget(model);
+    final model = TestModel(initialValue);
+    final widget = TestWidget(model);
 
     // Starts out at the initial value
     await tester.pumpWidget(widget);
@@ -37,8 +37,8 @@ void main() {
       'Widgets do not update when the model notifies the listeners if the choose not to',
       (WidgetTester tester) async {
     final initialValue = 0;
-    final model = new TestModel(initialValue);
-    final widget = new TestWidget.noRebuild(model);
+    final model = TestModel(initialValue);
+    final widget = TestWidget.noRebuild(model);
 
     // Starts out at the initial value
     await tester.pumpWidget(widget);
@@ -55,21 +55,21 @@ void main() {
 
   testWidgets("model change doesn't build widgets between model and descendant",
       (WidgetTester tester) async {
-    var testModel = new TestModel();
+    var testModel = TestModel();
 
     // use List to pass the counter by reference
     List<int> buildCounter = [0];
 
     // build widget tree with items between scope and descendant
-    var tree = new MaterialApp(
-      home: new ScopedModel<TestModel>(
+    var tree = MaterialApp(
+      home: ScopedModel<TestModel>(
         model: testModel,
-        child: new Container(
-          child: new BuildCountContainer(
+        child: Container(
+          child: BuildCountContainer(
             buildCounter: buildCounter,
-            child: new ScopedModelDescendant<TestModel>(
+            child: ScopedModelDescendant<TestModel>(
               builder: (BuildContext context, Widget child, TestModel model) {
-                return new Text("${model.counter}");
+                return Text("${model.counter}");
               },
             ),
           ),
@@ -98,8 +98,8 @@ void main() {
   testWidgets('Throws an error if type info not provided',
       (WidgetTester tester) async {
     final initialValue = 0;
-    final model = new TestModel(initialValue);
-    final widget = new ErrorWidget(model);
+    final model = TestModel(initialValue);
+    final widget = ErrorWidget(model);
 
     await tester.pumpWidget(widget);
 
@@ -128,19 +128,19 @@ class TestWidget extends StatelessWidget {
 
   TestWidget(this.model, [this.rebuildOnChange = true]);
 
-  factory TestWidget.noRebuild(TestModel model) => new TestWidget(model, false);
+  factory TestWidget.noRebuild(TestModel model) => TestWidget(model, false);
 
   @override
   Widget build(BuildContext context) {
-    return new ScopedModel<TestModel>(
+    return ScopedModel<TestModel>(
       model: model,
       // Extra nesting to ensure the model is sent down the tree.
-      child: new Container(
-        child: new Container(
-          child: new ScopedModelDescendant<TestModel>(
+      child: Container(
+        child: Container(
+          child: ScopedModelDescendant<TestModel>(
             rebuildOnChange: rebuildOnChange,
             builder: (context, child, model) {
-              return new Text(
+              return Text(
                 model.counter.toString(),
                 textDirection: TextDirection.ltr,
               );
@@ -160,15 +160,15 @@ class ErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new ScopedModel<TestModel>(
+    return ScopedModel<TestModel>(
       model: model,
       // Extra nesting to ensure the model is sent down the tree.
-      child: new Container(
-        child: new Container(
-          child: new ScopedModelDescendant(
+      child: Container(
+        child: Container(
+          child: ScopedModelDescendant(
             rebuildOnChange: rebuildOnChange,
             builder: (context, child, model) {
-              return new Text(
+              return Text(
                 model.counter.toString(),
                 textDirection: TextDirection.ltr,
               );
