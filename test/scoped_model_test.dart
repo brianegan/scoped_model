@@ -81,7 +81,7 @@ void main() {
     await tester.pumpWidget(tree);
     expect(find.text('0'), findsOneWidget);
     // the render method of the widgets between scope and descendant is called once
-    expect(buildCounter[0], equals(1));
+    expect(buildCounter[0], 1);
 
     // Increment the model, which should rebuild only the listening descendant subtree
     testModel.increment();
@@ -92,7 +92,7 @@ void main() {
     expect(find.text("1"), findsOneWidget);
 
     // the render method of the widgets between scope and descendant doesn't get called!
-    expect(buildCounter[0], equals(1));
+    expect(buildCounter[0], 1);
   });
 
   testWidgets('Throws an error if type info not provided',

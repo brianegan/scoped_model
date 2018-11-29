@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 /// In order to notify listeners that the data has changed, you must explicitly
 /// call the [notifyListeners] method.
 ///
-/// Generally used in conjunction with a [ScopedModel] Widget.
+/// Generally used in conjunction with a [ScopedModel] Widget, but if you do not
+/// need to pass the Widget down the tree, you can use a simple [AnimatedBuilder]
+/// to listen for changes and rebuild when the model notifies the listeners.
 ///
 /// ### Example
 ///
@@ -52,15 +54,17 @@ abstract class Model extends Listenable {
   /// Should be called only by [Model] when the model has changed.
   @protected
   void notifyListeners() {
-    // We schedule a microtask as it's not uncommon for changes that trigger
-    // listener notifications to occur in a build step and for listeners to
-    // call setState.  Its a big no-no to setState during build so we schedule
-    // for them to happen later.
+    // We schedule a microtask to debounce multiple changes that can occur
+    // all at once.
     if (_microtaskVersion == _version) {
       _microtaskVersion++;
       scheduleMicrotask(() {
         _version++;
         _microtaskVersion = _version;
+
+        // Convert the Set to a List before executing each listener. This
+        // prevents errors that can arise if a listener removes itself during
+        // invocation!
         _listeners.toList().forEach((VoidCallback listener) => listener());
       });
     }
@@ -111,9 +115,9 @@ class ScopedModel<T extends Model> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ModelBuilder<T>(
-      model: model,
-      builder: (context) => _InheritedModel<T>(model: model, child: child),
+    return AnimatedBuilder(
+      animation: model,
+      builder: (context, _) => _InheritedModel<T>(model: model, child: child),
     );
   }
 
@@ -181,46 +185,6 @@ class ScopedModel<T extends Model> extends StatelessWidget {
   }
 
   static Type _type<T>() => T;
-}
-
-/// Listens to a [model] and calls [builder] whenever [model] changes.
-class ModelBuilder<T extends Model> extends StatefulWidget {
-  final T model;
-  final WidgetBuilder builder;
-
-  const ModelBuilder({this.model, this.builder});
-
-  @override
-  _ModelBuilderState createState() => new _ModelBuilderState();
-}
-
-class _ModelBuilderState extends State<ModelBuilder> {
-  @override
-  void initState() {
-    super.initState();
-    widget.model.addListener(_onChange);
-  }
-
-  @override
-  void didUpdateWidget(ModelBuilder oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.model != oldWidget.model) {
-      oldWidget.model.removeListener(_onChange);
-      widget.model.addListener(_onChange);
-    }
-  }
-
-  @override
-  void dispose() {
-    widget.model.removeListener(_onChange);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => widget.builder(context);
-
-  void _onChange() => setState(() {});
 }
 
 /// Provides [model] to its [child] [Widget] tree via [InheritedWidget].  When
