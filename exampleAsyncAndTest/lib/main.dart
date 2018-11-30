@@ -3,7 +3,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'dart:async';
 
 void main() {
-  runApp(new MyApp(model: CounterModel()));
+  runApp(MyApp(model: CounterModel()));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,14 +16,14 @@ class MyApp extends StatelessWidget {
     // At the top level of our app, we'll, create a ScopedModel Widget. This
     // will provide the CounterModel to all children in the app that request it
     // using a ScopedModelDescendant.
-    return new ScopedModel<AbstractModel>(
+    return ScopedModel<AbstractModel>(
       model: model,
-      child: new MaterialApp(
+      child: MaterialApp(
         title: 'Flutter Demo',
-        theme: new ThemeData(
+        theme: ThemeData(
           primarySwatch: Colors.green,
         ),
-        home: new CounterHome('Scoped Model Demo'),
+        home: CounterHome('Scoped Model Demo'),
       ),
     );
   }
@@ -72,15 +72,15 @@ class CounterHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text(title),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
       ),
-      body: new Center(
-        child: new Column(
+      body: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new Text(
+            Text(
               'You have pushed the button this many times:',
             ),
             // Create a ScopedModelDescendant. This widget will get the
@@ -88,9 +88,8 @@ class CounterHome extends StatelessWidget {
             // It will hand that CounterModel to our builder method, and
             // rebuild any time the CounterModel changes (i.e. after we
             // `notifyListeners` in the Model).
-            new ScopedModelDescendant<AbstractModel>(
-              builder: (context, child, model) => new Text(
-                  model.counter.toString(),
+            ScopedModelDescendant<AbstractModel>(
+              builder: (context, child, model) => Text(model.counter.toString(),
                   style: Theme.of(context).textTheme.display1),
             ),
           ],
@@ -98,11 +97,11 @@ class CounterHome extends StatelessWidget {
       ),
       // Use the ScopedModelDescendant again in order to use the increment
       // method from the CounterModel
-      floatingActionButton: new ScopedModelDescendant<AbstractModel>(
-        builder: (context, child, model) => new FloatingActionButton(
+      floatingActionButton: ScopedModelDescendant<AbstractModel>(
+        builder: (context, child, model) => FloatingActionButton(
               onPressed: model.increment,
               tooltip: 'Increment',
-              child: new Icon(Icons.add),
+              child: Icon(Icons.add),
             ),
       ),
     );

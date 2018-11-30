@@ -14,7 +14,7 @@ void main() {
       'Counter increments test with the CounterModel => FAIL because the model contains an async function called',
       (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(new MyApp(model: CounterModel()));
+    await tester.pumpWidget(MyApp(model: CounterModel()));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
@@ -32,7 +32,7 @@ void main() {
   testWidgets('Counter increments test with the TestModel => SUCCESS',
       (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(new MyApp(model: TestModel()));
+    await tester.pumpWidget(MyApp(model: TestModel()));
 
     // Verify that our counter starts at 0.
     expect(find.text('111'), findsOneWidget);
