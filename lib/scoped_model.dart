@@ -11,8 +11,9 @@ import 'package:flutter/material.dart';
 /// call the [notifyListeners] method.
 ///
 /// Generally used in conjunction with a [ScopedModel] Widget, but if you do not
-/// need to pass the Widget down the tree, you can use a simple [AnimatedBuilder]
-/// to listen for changes and rebuild when the model notifies the listeners.
+/// need to pass the Widget down the tree, you can use a simple
+/// [AnimatedBuilder] to listen for changes and rebuild when the model notifies
+/// the listeners.
 ///
 /// ### Example
 ///
@@ -239,17 +240,19 @@ typedef Widget ScopedModelDescendantBuilder<T extends Model>(
 /// );
 /// ```
 class ScopedModelDescendant<T extends Model> extends StatelessWidget {
-  /// Called whenever the [Model] changes.
+  /// Builds a Widget when the Widget is first created and whenever
+  /// the [Model] changes if [rebuildOnChange] is set to `true`.
   final ScopedModelDescendantBuilder<T> builder;
 
   /// An optional constant child that does not depend on the model.  This will
   /// be passed as the child of [builder].
   final Widget child;
 
-  /// An optional constant that determines whether the
+  /// An optional value that determines whether the Widget will rebuild when
+  /// the model changes.
   final bool rebuildOnChange;
 
-  /// Constructor.
+  /// Creates the ScopedModelDescendant
   ScopedModelDescendant({
     @required this.builder,
     this.child,
@@ -266,6 +269,8 @@ class ScopedModelDescendant<T extends Model> extends StatelessWidget {
   }
 }
 
+/// The error that will be thrown if the ScopedModel cannot be found in the
+/// Widget tree.
 class ScopedModelError extends Error {
   ScopedModelError();
 
