@@ -34,15 +34,22 @@ class MyApp extends StatelessWidget {
 // Note: It must extend from Model.
 abstract class AbstractModel extends Model {
   int get counter;
+  bool get disabled;
   void increment();
+  setDisabled(bool val);
 }
 
 class CounterModel extends AbstractModel {
   int _counter = 0;
+  bool _disabled = false;
 
   int get counter => _counter;
+  bool get disabled => _disabled;
 
   void increment() async {
+    //
+    if (_disabled) return;
+
     // First, increment the counter
     _counter++;
 
@@ -52,15 +59,12 @@ class CounterModel extends AbstractModel {
     // Then notify all the listeners.
     notifyListeners();
   }
-}
 
-class TestModel extends AbstractModel {
-  int _counter = 111;
+  setDisabled(bool val) {
+    // set if disabled
+    _disabled = val;
 
-  int get counter => _counter;
-
-  void increment() {
-    _counter += 2;
+    // Then notify all the listeners.
     notifyListeners();
   }
 }
@@ -80,28 +84,47 @@ class CounterHome extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
+            Text('You have pushed the button this many times:'),
             // Create a ScopedModelDescendant. This widget will get the
             // CounterModel from the nearest parent ScopedModel<CounterModel>.
             // It will hand that CounterModel to our builder method, and
             // rebuild any time the CounterModel changes (i.e. after we
             // `notifyListeners` in the Model).
             ScopedModelDescendant<AbstractModel>(
-              builder: (context, child, model) => Text(model.counter.toString(),
-                  style: Theme.of(context).textTheme.display1),
+              builder: (context, child, model) => Text(
+                    model.counter.toString(),
+                    style: Theme.of(context).textTheme.display1,
+                  ),
+            ),
+            SizedBox(height: 50),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // ScopedModelDesendat could be used multiple times
+                // in many widgets. In this case is for using
+                // setDiabled
+                ScopedModelDescendant<AbstractModel>(
+                  builder: (context, child, model) => Switch(
+                        value: model.disabled,
+                        onChanged: (bool val) {
+                          model.setDisabled(val);
+                        },
+                      ),
+                ),
+                Text("Disable button"),
+              ],
             ),
           ],
         ),
       ),
       // Use the ScopedModelDescendant again in order to use the increment
-      // method from the CounterModel
+      // and setDisabled method from the CounterModel.
       floatingActionButton: ScopedModelDescendant<AbstractModel>(
         builder: (context, child, model) => FloatingActionButton(
-              onPressed: model.increment,
+              onPressed: model.disabled ? null : model.increment,
               tooltip: 'Increment',
               child: Icon(Icons.add),
+              backgroundColor: model.disabled ? Colors.grey : Colors.green,
             ),
       ),
     );

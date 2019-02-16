@@ -45,16 +45,35 @@ void main() {
     // Verify that our counter has incremented.
     expect(find.text('111'), findsNothing);
     expect(find.text('113'), findsOneWidget);
+
+    // Disebling increment and increment button
+    await tester.tap(find.byType(Switch));
+    await tester.pump();
+
+    // Tap the '+' icon and trigger a frame.
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump();
+
+    expect(find.text('113'), findsOneWidget);
   });
 }
 
 class TestModel extends AbstractModel {
   int _counter = 111;
+  bool _enable = true;
+  bool _disabled = false;
 
   int get counter => _counter;
+  bool get enable => _enable;
+  bool get disabled => _disabled;
 
   void increment() {
     _counter += 2;
+    notifyListeners();
+  }
+
+  setDisabled(bool val) {
+    _disabled = val;
     notifyListeners();
   }
 }
