@@ -66,7 +66,7 @@ abstract class Model extends Listenable {
         // Convert the Set to a List before executing each listener. This
         // prevents errors that can arise if a listener removes itself during
         // invocation!
-        _listeners.toList().forEach((VoidCallback listener) => listener());
+        _listeners.forEach((VoidCallback listener) => listener());
       });
     }
   }
