@@ -20,7 +20,7 @@ This library is built upon several features of Flutter:
 ## Examples
 
   * [Counter App](https://github.com/brianegan/scoped_model/tree/master/example) - Introduction to the tools provided by Scoped Model. 
-  * [Todo App](https://github.com/brianegan/flutter_architecture_samples/tree/master/example/scoped_model) - Shows how to write a Todo app with persistence and tests. 
+  * [Todo App](https://github.com/brianegan/flutter_architecture_samples/tree/master/scoped_model) - Shows how to write a Todo app with persistence and tests. 
 
 ## Usage
 
