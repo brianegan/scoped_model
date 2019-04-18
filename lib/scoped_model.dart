@@ -54,9 +54,12 @@ abstract class Model extends Listenable {
 
   /// Should be called only by [Model] when the model has changed.
   @protected
-  void notifyListeners() {
+  void notifyListeners({bool forced = false}) {
     // We schedule a microtask to debounce multiple changes that can occur
     // all at once.
+    if (forced) {
+      _listeners.toList().forEach((VoidCallback listener) => listener());
+    }
     if (_microtaskVersion == _version) {
       _microtaskVersion++;
       scheduleMicrotask(() {
@@ -174,9 +177,7 @@ class ScopedModel<T extends Model> extends StatelessWidget {
   }) {
     final Type type = _type<_InheritedModel<T>>();
 
-    Widget widget = rebuildOnChange
-        ? context.inheritFromWidgetOfExactType(type)
-        : context.ancestorInheritedElementForWidgetOfExactType(type)?.widget;
+    Widget widget = rebuildOnChange ? context.inheritFromWidgetOfExactType(type) : context.ancestorInheritedElementForWidgetOfExactType(type)?.widget;
 
     if (widget == null) {
       throw ScopedModelError();
@@ -202,8 +203,7 @@ class _InheritedModel<T extends Model> extends InheritedWidget {
         super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(_InheritedModel<T> oldWidget) =>
-      (oldWidget.version != version);
+  bool updateShouldNotify(_InheritedModel<T> oldWidget) => (oldWidget.version != version);
 }
 
 /// Builds a child for a [ScopedModelDescendant].
