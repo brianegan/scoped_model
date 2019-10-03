@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/brianegan/scoped_model.svg?branch=master)](https://travis-ci.org/brianegan/scoped_model)  [![codecov](https://codecov.io/gh/brianegan/scoped_model/branch/master/graph/badge.svg)](https://codecov.io/gh/brianegan/scoped_model)
 
-A set of utilities that allow you to easily pass a data Model from a parent Widget down to it's descendants. In addition, it also rebuilds all of the children that use the model when the model is updated. This library was originally extracted from the Fuchsia codebase. 
+A set of utilities that allow you to easily pass a data Model from a parent Widget down to its descendants. In addition, it also rebuilds all of the children that use the model when the model is updated. This library was originally extracted from the Fuchsia codebase. 
 
 This Library provides three main classes:
 
@@ -14,7 +14,7 @@ This library is built upon several features of Flutter:
 
   * The `Model` class implements the `Listenable` interface
     * `AnimationController` and `TextEditingController` are also `Listenables`
-  * The `Model` is passed down the Widget tree using an `InheritedWidget`. When an `InheritedWidget` is rebuilt, it will surgically rebuild all of the Widgets that depend on it's data. No need to manage subscriptions!
+  * The `Model` is passed down the Widget tree using an `InheritedWidget`. When an `InheritedWidget` is rebuilt, it will surgically rebuild all of the Widgets that depend on its data. No need to manage subscriptions!
   * It uses the `AnimatedBuilder` Widget under the hood to listen to the Model and rebuild the `InheritedWidget` when the model changes. 
 
 ## Examples
