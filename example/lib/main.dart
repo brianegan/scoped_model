@@ -69,7 +69,7 @@ class CounterHome extends StatelessWidget {
               builder: (context, child, model) {
                 return Text(
                   model.counter.toString(),
-                  style: Theme.of(context).textTheme.display1,
+                  style: Theme.of(context).textTheme.headline4,
                 );
               },
             ),
