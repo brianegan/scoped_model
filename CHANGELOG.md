@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0
+
+  * Migrate from deprecated InheritedWidget methods to new implementations
+    * `inheritFromWidgetOfExactType` > `dependOnInheritedWidgetOfExactType`  
+    * `ancestorInheritedElementForWidgetOfExactType` > `getElementForInheritedWidgetOfExactType`  
+    * Thanks to Kate Lovett and Kevin Moore!
+
 ## 1.0.1
 
   * Fix changelog

@@ -1,9 +1,6 @@
 name: scoped_model
 description: A Widget that passes a Reactive Model to all of it's children
-version: 1.0.1
-authors:
-  - Andrew Wilson <apwilson@google.com>
-  - Brian Egan <brian@brianegan.com>
+version: 1.1.0
 homepage: https://github.com/brianegan/scoped_model
 
 environment:
