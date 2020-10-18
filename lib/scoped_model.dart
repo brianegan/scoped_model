@@ -172,10 +172,11 @@ class ScopedModel<T extends Model> extends StatelessWidget {
     BuildContext context, {
     bool rebuildOnChange = false,
   }) {
-
     Widget widget = rebuildOnChange
         ? context.dependOnInheritedWidgetOfExactType<_InheritedModel<T>>()
-        : context.getElementForInheritedWidgetOfExactType<_InheritedModel<T>>()?.widget;
+        : context
+            .getElementForInheritedWidgetOfExactType<_InheritedModel<T>>()
+            ?.widget;
 
     if (widget == null) {
       throw ScopedModelError();
@@ -187,7 +188,7 @@ class ScopedModel<T extends Model> extends StatelessWidget {
 
 /// Provides [model] to its [child] [Widget] tree via [InheritedWidget].  When
 /// [version] changes, all descendants who request (via
-/// [BuildContext.inheritFromWidgetOfExactType]) to be rebuilt when the model
+/// [BuildContext.dependOnInheritedWidgetOfExactType]) to be rebuilt when the model
 /// changes will do so.
 class _InheritedModel<T extends Model> extends InheritedWidget {
   final T model;

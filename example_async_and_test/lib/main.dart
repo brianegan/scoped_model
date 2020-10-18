@@ -90,7 +90,7 @@ class CounterHome extends StatelessWidget {
             // `notifyListeners` in the Model).
             ScopedModelDescendant<AbstractModel>(
               builder: (context, child, model) => Text(model.counter.toString(),
-                  style: Theme.of(context).textTheme.display1),
+                  style: Theme.of(context).textTheme.headline4),
             ),
           ],
         ),
@@ -99,10 +99,10 @@ class CounterHome extends StatelessWidget {
       // method from the CounterModel
       floatingActionButton: ScopedModelDescendant<AbstractModel>(
         builder: (context, child, model) => FloatingActionButton(
-              onPressed: model.increment,
-              tooltip: 'Increment',
-              child: Icon(Icons.add),
-            ),
+          onPressed: model.increment,
+          tooltip: 'Increment',
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }
