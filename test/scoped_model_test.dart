@@ -68,7 +68,7 @@ void main() {
           child: BuildCountContainer(
             buildCounter: buildCounter,
             child: ScopedModelDescendant<TestModel>(
-              builder: (BuildContext context, Widget child, TestModel model) {
+              builder: (BuildContext context, Widget? child, TestModel model) {
                 return Text("${model.counter}");
               },
             ),
@@ -110,13 +110,11 @@ void main() {
 class TestModel extends Model {
   int _counter;
 
-  TestModel([int initialValue = 0]) {
-    _counter = initialValue;
-  }
+  TestModel([int initialValue = 0]) : _counter = initialValue;
 
   int get counter => _counter;
 
-  void increment([int value]) {
+  void increment([int? value]) {
     _counter++;
     notifyListeners();
   }
@@ -167,7 +165,7 @@ class ErrorWidget extends StatelessWidget {
         child: Container(
           child: ScopedModelDescendant(
             rebuildOnChange: rebuildOnChange,
-            builder: (context, child, model) {
+            builder: (context, child, dynamic model) {
               return Text(
                 model.counter.toString(),
                 textDirection: TextDirection.ltr,
@@ -189,5 +187,6 @@ class BuildCountContainer extends Container {
     return super.build(context);
   }
 
-  BuildCountContainer({Widget child, this.buildCounter}) : super(child: child);
+  BuildCountContainer({Widget? child, required this.buildCounter})
+      : super(child: child);
 }

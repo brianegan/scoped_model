@@ -110,9 +110,7 @@ class ScopedModel<T extends Model> extends StatelessWidget {
   /// The [Widget] the [model] will be available to.
   final Widget child;
 
-  ScopedModel({@required this.model, @required this.child})
-      : assert(model != null),
-        assert(child != null);
+  ScopedModel({required this.model, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +170,7 @@ class ScopedModel<T extends Model> extends StatelessWidget {
     BuildContext context, {
     bool rebuildOnChange = false,
   }) {
-    Widget widget = rebuildOnChange
+    var widget = rebuildOnChange
         ? context.dependOnInheritedWidgetOfExactType<_InheritedModel<T>>()
         : context
             .getElementForInheritedWidgetOfExactType<_InheritedModel<T>>()
@@ -194,7 +192,7 @@ class _InheritedModel<T extends Model> extends InheritedWidget {
   final T model;
   final int version;
 
-  _InheritedModel({Key key, Widget child, T model})
+  _InheritedModel({Key? key, required Widget child, required T model})
       : this.model = model,
         this.version = model._version,
         super(key: key, child: child);
@@ -207,7 +205,7 @@ class _InheritedModel<T extends Model> extends InheritedWidget {
 /// Builds a child for a [ScopedModelDescendant].
 typedef Widget ScopedModelDescendantBuilder<T extends Model>(
   BuildContext context,
-  Widget child,
+  Widget? child,
   T model,
 );
 
@@ -244,7 +242,7 @@ class ScopedModelDescendant<T extends Model> extends StatelessWidget {
 
   /// An optional constant child that does not depend on the model.  This will
   /// be passed as the child of [builder].
-  final Widget child;
+  final Widget? child;
 
   /// An optional value that determines whether the Widget will rebuild when
   /// the model changes.
@@ -252,7 +250,7 @@ class ScopedModelDescendant<T extends Model> extends StatelessWidget {
 
   /// Creates the ScopedModelDescendant
   ScopedModelDescendant({
-    @required this.builder,
+    required this.builder,
     this.child,
     this.rebuildOnChange = true,
   });
