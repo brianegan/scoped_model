@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0-nullsafety.0
+
+  * Enable null safety for this package.
+
 ## 1.1.0
 
   * Migrate from deprecated InheritedWidget methods to new implementations
