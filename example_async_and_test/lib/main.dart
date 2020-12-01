@@ -9,7 +9,7 @@ void main() {
 class MyApp extends StatelessWidget {
   final AbstractModel model;
 
-  const MyApp({Key key, @required this.model}) : super(key: key);
+  const MyApp({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +90,7 @@ class CounterHome extends StatelessWidget {
             // `notifyListeners` in the Model).
             ScopedModelDescendant<AbstractModel>(
               builder: (context, child, model) => Text(model.counter.toString(),
-                  style: Theme.of(context).textTheme.headline4),
+                  style: Theme.of(context)!.textTheme.headline4),
             ),
           ],
         ),

@@ -10,7 +10,7 @@ void main() {
 class MyApp extends StatelessWidget {
   final CounterModel model;
 
-  const MyApp({Key key, @required this.model}) : super(key: key);
+  const MyApp({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class CounterHome extends StatelessWidget {
               builder: (context, child, model) {
                 return Text(
                   model.counter.toString(),
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context)!.textTheme.headline4,
                 );
               },
             ),
