@@ -89,8 +89,10 @@ class CounterHome extends StatelessWidget {
             // rebuild any time the CounterModel changes (i.e. after we
             // `notifyListeners` in the Model).
             ScopedModelDescendant<AbstractModel>(
-              builder: (context, child, model) => Text(model.counter.toString(),
-                  style: Theme.of(context)!.textTheme.headline4),
+              builder: (context, child, model) => Text(
+                model.counter.toString(),
+                style: Theme.of(context).textTheme.headline4,
+              ),
             ),
           ],
         ),
