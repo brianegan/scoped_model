@@ -32,6 +32,7 @@ import 'package:flutter/material.dart';
 ///   }
 /// }
 /// ```
+@deprecated
 abstract class Model extends Listenable {
   final Set<VoidCallback> _listeners = Set<VoidCallback>();
   int _version = 0;
@@ -103,22 +104,13 @@ class ModelFinder<T extends Model> {
 ///   ),
 /// );
 /// ```
-class ScopedModel<T extends Model> extends StatelessWidget {
+class ScopedModel<T extends Listenable> extends InheritedNotifier<T> {
   /// The [Model] to provide to [child] and its descendants.
   final T model;
 
   /// The [Widget] the [model] will be available to.
-  final Widget child;
-
-  ScopedModel({required this.model, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: model,
-      builder: (context, _) => _InheritedModel<T>(model: model, child: child),
-    );
-  }
+  ScopedModel({Key? key, required this.model, required Widget child})
+      : super(key: key, notifier: model, child: child);
 
   /// Finds a [Model] provided by a [ScopedModel] Widget.
   ///
@@ -166,40 +158,20 @@ class ScopedModel<T extends Model> extends StatelessWidget {
   ///   }
   /// }
   /// ```
-  static T of<T extends Model>(
-    BuildContext context, {
-    bool rebuildOnChange = false,
-  }) {
+  static T of<T extends Listenable>(BuildContext context,
+      {bool rebuildOnChange = true}) {
     var widget = rebuildOnChange
-        ? context.dependOnInheritedWidgetOfExactType<_InheritedModel<T>>()
+        ? context.dependOnInheritedWidgetOfExactType<ScopedModel<T>>()
         : context
-            .getElementForInheritedWidgetOfExactType<_InheritedModel<T>>()
+            .getElementForInheritedWidgetOfExactType<ScopedModel<T>>()
             ?.widget;
 
     if (widget == null) {
       throw ScopedModelError();
     } else {
-      return (widget as _InheritedModel<T>).model;
+      return (widget as ScopedModel<T>).model;
     }
   }
-}
-
-/// Provides [model] to its [child] [Widget] tree via [InheritedWidget].  When
-/// [version] changes, all descendants who request (via
-/// [BuildContext.dependOnInheritedWidgetOfExactType]) to be rebuilt when the model
-/// changes will do so.
-class _InheritedModel<T extends Model> extends InheritedWidget {
-  final T model;
-  final int version;
-
-  _InheritedModel({Key? key, required Widget child, required T model})
-      : this.model = model,
-        this.version = model._version,
-        super(key: key, child: child);
-
-  @override
-  bool updateShouldNotify(_InheritedModel<T> oldWidget) =>
-      (oldWidget.version != version);
 }
 
 /// Builds a child for a [ScopedModelDescendant].
