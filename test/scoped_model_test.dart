@@ -29,7 +29,7 @@ void main() {
     // Rebuild the widget
     await tester.pumpWidget(widget);
 
-    expect(model.listenerCount, 1);
+    expect(model.counter, 1);
     expect(find.text('1'), findsOneWidget);
   });
 
@@ -49,7 +49,7 @@ void main() {
     // Rebuild the widget
     await tester.pumpWidget(widget);
 
-    expect(model.listenerCount, 1);
+    expect(model.counter, 1);
     expect(find.text('$initialValue'), findsOneWidget);
   });
 
@@ -62,7 +62,7 @@ void main() {
 
     // build widget tree with items between scope and descendant
     var tree = MaterialApp(
-      home: ScopedModel<TestModel>(
+      home: ScopedModel(
         model: testModel,
         child: Container(
           child: BuildCountContainer(
@@ -107,7 +107,7 @@ void main() {
   });
 }
 
-class TestModel extends Model {
+class TestModel extends ChangeNotifier {
   int _counter;
 
   TestModel([int initialValue = 0]) : _counter = initialValue;
@@ -130,7 +130,7 @@ class TestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<TestModel>(
+    return ScopedModel(
       model: model,
       // Extra nesting to ensure the model is sent down the tree.
       child: Container(
@@ -158,7 +158,7 @@ class ErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<TestModel>(
+    return ScopedModel(
       model: model,
       // Extra nesting to ensure the model is sent down the tree.
       child: Container(

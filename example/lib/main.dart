@@ -17,8 +17,9 @@ class MyApp extends StatelessWidget {
     // At the top level of our app, we'll, create a ScopedModel Widget. This
     // will provide the CounterModel to all children in the app that request it
     // using a ScopedModelDescendant.
-    return ScopedModel<CounterModel>(
+    return ScopedModel(
       model: model,
+      tag: CounterTag(),
       child: MaterialApp(
         title: 'Scoped Model Demo',
         home: CounterHome('Scoped Model Demo'),
@@ -27,10 +28,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class CounterTag extends DefaultTag {}
+
 // Start by creating a class that has a counter and a method to increment it.
 //
-// Note: It must extend from Model.
-class CounterModel extends Model {
+// Note: It must extend from ChangeNotifier.
+class CounterModel extends ChangeNotifier {
   int _counter = 0;
 
   int get counter => _counter;
@@ -64,7 +67,7 @@ class CounterHome extends StatelessWidget {
             // CounterModel from the nearest parent ScopedModel<CounterModel>.
             // It will hand that CounterModel to our builder method, and
             // rebuild any time the CounterModel changes (i.e. after we
-            // `notifyListeners` in the Model).
+            // `notifyListeners` in the ChangeNotifier).
             ScopedModelDescendant<CounterModel>(
               builder: (context, child, model) {
                 return Text(

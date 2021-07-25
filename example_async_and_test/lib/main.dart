@@ -6,6 +6,8 @@ void main() {
   runApp(MyApp(model: CounterModel()));
 }
 
+class Distinct {}
+
 class MyApp extends StatelessWidget {
   final AbstractModel model;
 
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
     // At the top level of our app, we'll, create a ScopedModel Widget. This
     // will provide the CounterModel to all children in the app that request it
     // using a ScopedModelDescendant.
-    return ScopedModel<AbstractModel>(
+    return ScopedModel(
       model: model,
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -31,8 +33,8 @@ class MyApp extends StatelessWidget {
 
 // Start by creating a class that has a counter and a method to increment it.
 //
-// Note: It must extend from Model.
-abstract class AbstractModel extends Model {
+// Note: It must extend from ChangeNotifier.
+abstract class AbstractModel extends ChangeNotifier {
   int get counter;
   void increment();
 }
@@ -87,7 +89,7 @@ class CounterHome extends StatelessWidget {
             // CounterModel from the nearest parent ScopedModel<CounterModel>.
             // It will hand that CounterModel to our builder method, and
             // rebuild any time the CounterModel changes (i.e. after we
-            // `notifyListeners` in the Model).
+            // `notifyListeners` in the ChangeNotifier).
             ScopedModelDescendant<AbstractModel>(
               builder: (context, child, model) => Text(
                 model.counter.toString(),
